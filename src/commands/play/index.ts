@@ -1,6 +1,6 @@
 import { MessageEmbed, Emoji, ReactionCollector, ReactionManager, MessageReaction, User } from 'discord.js'
 
-let players = []
+let players: User[] = []
 
 exports.run = (bot: any, msg: any, args: []) => {
   const embed: any = new MessageEmbed()
@@ -16,30 +16,25 @@ exports.run = (bot: any, msg: any, args: []) => {
       Ton but sera alors de faire croire que tu en as un, en essayant de deviner le mot des Civils.\n\n')
       .addField('Comment participer?', 'Réagissez à ce message avec l\'emoji 👍')
   msg.channel.send(embed).then((botMsg: any) => {
-    botMsg.react('👍').then((reaction: MessageReaction) => {
-      const filter = (reaction: any, user: User) => {
-        console.log("user ", user.id)
-        console.log("bot  ", bot.user.id)
-          return (reaction.emoji.name === '👍' || reaction.emoji.name === '😩') && user.id !== bot.user.id
-        }
-        let collector: any = botMsg.createReactionCollector(filter, {time: 15000});
-        collector.on('dispose', (reaction: any) => {
-          console.log("DISPOOOOSE", reaction)
-          console.log("Why do I float in the air without a purpose?")
-          msg.channel.send('Dispose')
-        })
-        collector.on('collect', (reaction: any) => {
-          console.log(reaction)
-          let index = 1
-          reaction.users.cache.forEach((user: User, key: number, arr: []) => {
-            // console.log("user: ", user, "\nindex: ", key, "\narr: ", arr)
-            if (reaction.count == index) {
-              msg.channel.send('Un nouveau joueur rejoint la partie: ' + user.username)
-              players.push(user)
+    botMsg.react('👍').then(() => {
+        bot.on('messageReactionAdd', (reaction: MessageReaction, user: User) => {
+          if (user.id != bot.user.id) {
+            switch (reaction.emoji.name) {
+              case '👍':
+                msg.channel.send('Un nouveau joueur rejoint la partie: ' + user.username)
+                players.push(user)
+                break;
             }
-            index += 1
-          })
-        })
+          }
+        });
+        bot.on('messageReactionRemove', (reaction: MessageReaction, user: User) => {
+          switch (reaction.emoji.name) {
+            case '👍':
+              msg.channel.send('Un joueur a quitté la partie: ' + user.username)
+              players.splice(players.indexOf(user))
+              break;
+          }
+        });
       }
     )
   })
