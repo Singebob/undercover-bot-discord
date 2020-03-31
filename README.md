@@ -1,5 +1,15 @@
 # Node TypeScript Starter
 
+# Token
+
+to make this project work create a config.json at the root of src/ directory
+with the following content:
+```
+{
+  "token": "Your bot token"
+}
+```
+
 ## Getting started
 
 1. Clone this repository and open it

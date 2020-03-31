@@ -1,6 +1,7 @@
 import discord from 'discord.js';
+import config from './config.json';
+
 const bot: any = new discord.Client();
-const token: string = 'NTQyMzM4OTk1NDAxNTIzMjMw.Xn9Skg.FmSY3bEPuaqBZpuo_UCnZ2rnFEc'
 const trigger = '$'
 
 bot.on('message', (msg: any) => {
@@ -22,4 +23,4 @@ bot.on('message', (msg: any) => {
   }
 });
 
-bot.login(token).catch(console.error);
+bot.login(config.token).catch(console.error);
