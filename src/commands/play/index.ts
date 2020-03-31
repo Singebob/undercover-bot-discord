@@ -1,6 +1,5 @@
 import { MessageEmbed, Emoji, ReactionCollector, ReactionManager, MessageReaction, User } from 'discord.js'
-
-let players: User[] = []
+import Undercover from '../../undercover'
 
 exports.run = (bot: any, msg: any, args: []) => {
   const embed: any = new MessageEmbed()
@@ -22,7 +21,7 @@ exports.run = (bot: any, msg: any, args: []) => {
             switch (reaction.emoji.name) {
               case '👍':
                 msg.channel.send('Un nouveau joueur rejoint la partie: ' + user.username)
-                players.push(user)
+                Undercover.players.push(user)
                 break;
             }
           }
@@ -31,7 +30,7 @@ exports.run = (bot: any, msg: any, args: []) => {
           switch (reaction.emoji.name) {
             case '👍':
               msg.channel.send('Un joueur a quitté la partie: ' + user.username)
-              players.splice(players.indexOf(user))
+              Undercover.players.splice(Undercover.players.indexOf(user))
               break;
           }
         });
