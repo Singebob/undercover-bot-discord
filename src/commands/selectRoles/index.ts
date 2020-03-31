@@ -1,8 +1,8 @@
 import { MessageEmbed, MessageReaction, User, Message } from 'discord.js'
-import Undercover from '../../undercover'
+import { Undercover, ROLESNAMES } from '../../undercover'
 import next from '../next';
 
-exports.run = (bot: any, msg: Message, args: []) => {
+const selectRoles = (bot: any, msg: Message, args: []) => {
   const embed: MessageEmbed = new MessageEmbed()
       .setTitle('Sélectionnez les rôles pour cette partie')
       .addField('Rôles actuels', Undercover.roles.join(', '))
@@ -18,18 +18,19 @@ exports.run = (bot: any, msg: Message, args: []) => {
       .addField('Supprimer un rôle', 'Pour supprimer un rôle, utilisez la \
       commande deleteRoles ou supprimez votre réaction a ce message')
       .addField('Réaction', '- Undercover: 🕵️\n- Mr. White: 👀\n \
-      Les amoureux: 💑\n- La vengeuse: 🦸‍♀️')
-    msg.channel.send(embed).then((botMsg: Message) => {
+      - Les amoureux: 💑\n- La vengeuse: 🦸‍♀️')
+  msg.channel.send(embed).then((botMsg: Message) => {
     botMsg.react('➡️')
-    botMsg.react('️️🕵️')
+    botMsg.react('🕵️')
     botMsg.react('👀')
     botMsg.react('💑')
-    botMsg.react('‍️‍🦸‍♀️').then(() => {
+    botMsg.react('🦸‍♀️').then(() => {
       bot.on('messageReactionAdd', (reaction: MessageReaction, user: User) => {
         if (user.id != bot.user.id) {
           switch (reaction.emoji.name) {
             case '🦸‍♀️':
               console.log("Ajout roles: vengeuse")
+              msg.channel.send("Ajout roles: vengeuse")
               break;
             case '➡️':
               next(bot, msg, [])
@@ -46,3 +47,7 @@ exports.run = (bot: any, msg: Message, args: []) => {
     })
   })
 }
+
+exports.run = selectRoles
+
+export default selectRoles

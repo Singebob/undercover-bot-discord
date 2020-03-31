@@ -5,6 +5,13 @@ enum ROLES {
   avenger,
 }
 
+enum ROLESNAMES {
+  undercover = "Undercover",
+  mrWhite = "Mr. White",
+  lovers = "Les amoureux",
+  avenger = "La vengeuse",
+}
+
 enum STEPS {
   start = 1,
   selectRoles,
@@ -22,4 +29,4 @@ var Undercover = {
   step: STEPS.start
 }
 
-module.exports = { Undercover, STEPS, ROLES }
+module.exports = { Undercover, ROLES, ROLESNAMES, STEPS }

@@ -1,5 +1,6 @@
 import { Message } from 'discord.js'
 import { Undercover, STEPS } from '../../undercover'
+import selectRoles from '../selectRoles';
 
 const next = (bot: any, msg: Message, args: []) => {
   if (Undercover.step == STEPS.gameOver) {
@@ -7,12 +8,9 @@ const next = (bot: any, msg: Message, args: []) => {
   } else {
     Undercover.step += 1
   }
-  console.log("next: ", Undercover)
   switch (Undercover.step) {
     case STEPS.selectRoles:
-      // Call function selectRoles
-      console.log("selectRoles")
-      msg.channel.send("selectRoles")
+      selectRoles(bot, msg, [])
       break;
     case STEPS.selectNumberRoles:
       // Call function selectNumberRoles
