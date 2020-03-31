@@ -16,30 +16,28 @@ exports.run = (bot: any, msg: Message, args: []) => {
       Ton but sera alors de faire croire que tu en as un, en essayant de deviner le mot des Civils.\n\n')
       .addField('Comment participer?', 'Réagissez à ce message avec l\'emoji 👍')
   msg.channel.send(embed).then((botMsg: Message) => {
+    botMsg.react('➡️')
     botMsg.react('👍').then(() => {
-      botMsg.react('➡️').then(() => {
-        bot.on('messageReactionAdd', (reaction: MessageReaction, user: User) => {
-          if (user.id != bot.user.id) {
-            switch (reaction.emoji.name) {
-              case '👍':
-                msg.channel.send('Un nouveau joueur rejoint la partie: ' + user.username)
-                Undercover.players.push(user)
-                break;
-              case '➡️':
-                next(bot, msg, [])
-                console.log("play: ", Undercover)
-                break;
-            }
-          }
-        });
-        bot.on('messageReactionRemove', (reaction: MessageReaction, user: User) => {
+      bot.on('messageReactionAdd', (reaction: MessageReaction, user: User) => {
+        if (user.id != bot.user.id) {
           switch (reaction.emoji.name) {
             case '👍':
-              msg.channel.send('Un joueur a quitté la partie: ' + user.username)
-              Undercover.players.splice(Undercover.players.indexOf(user))
+              msg.channel.send('Un nouveau joueur rejoint la partie: ' + user.username)
+              Undercover.players.push(user)
+              break;
+            case '➡️':
+              next(bot, msg, [])
               break;
           }
-        })
+        }
+      });
+      bot.on('messageReactionRemove', (reaction: MessageReaction, user: User) => {
+        switch (reaction.emoji.name) {
+          case '👍':
+            msg.channel.send('Un joueur a quitté la partie: ' + user.username)
+            Undercover.players.splice(Undercover.players.indexOf(user))
+            break;
+        }
       })
     })
   })
