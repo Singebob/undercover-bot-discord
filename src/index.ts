@@ -9,6 +9,7 @@ bot.on('message', (msg: any) => {
     const args = cmd.split(' ')
     try {
       let commandFile = require(`./commands/${args[0]}`);
+      console.log(commandFile)
       commandFile.run(bot, msg, args)
     } catch (e) {
       if (e.code == 'MODULE_NOT_FOUND') {

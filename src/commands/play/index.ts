@@ -1,5 +1,6 @@
 import { MessageEmbed, MessageReaction, User, Message } from 'discord.js'
 import Undercover from '../../undercover'
+import next from '../next';
 
 exports.run = (bot: any, msg: Message, args: []) => {
   const embed: MessageEmbed = new MessageEmbed()
@@ -14,14 +15,19 @@ exports.run = (bot: any, msg: Message, args: []) => {
       - Tu peux être Mr ou Mrs White, et dans ce cas là, tu ne recevras aucun mot. \
       Ton but sera alors de faire croire que tu en as un, en essayant de deviner le mot des Civils.\n\n')
       .addField('Comment participer?', 'Réagissez à ce message avec l\'emoji 👍')
-  msg.channel.send(embed).then((botMsg: any) => {
+  msg.channel.send(embed).then((botMsg: Message) => {
     botMsg.react('👍').then(() => {
+      botMsg.react('➡️').then(() => {
         bot.on('messageReactionAdd', (reaction: MessageReaction, user: User) => {
           if (user.id != bot.user.id) {
             switch (reaction.emoji.name) {
               case '👍':
                 msg.channel.send('Un nouveau joueur rejoint la partie: ' + user.username)
                 Undercover.players.push(user)
+                break;
+              case '➡️':
+                next(bot, msg, [])
+                console.log("play: ", Undercover)
                 break;
             }
           }
@@ -33,8 +39,8 @@ exports.run = (bot: any, msg: Message, args: []) => {
               Undercover.players.splice(Undercover.players.indexOf(user))
               break;
           }
-        });
-      }
-    )
+        })
+      })
+    })
   })
 }
